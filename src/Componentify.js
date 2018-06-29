@@ -8,67 +8,50 @@ class Componentify extends Component {
   getCurrentMatcher(matchersKeys, text) {
     const { matchers } = this.props;
 
-    return matchersKeys.reduce((acc, key) => {
+    return matchersKeys.reduce((currentMatcher, key) => {
       const matcher = Object.assign({}, matchers[key]);
-      const regex = new RegExp(matcher.regex, "g");
-      const match = regex.exec(text);
+      const regex = matcher.regex;
+      const currentMatch = regex.exec(text);
 
-      if (match !== null) {
-        matcher.match = match;
-        const index = acc && acc.match.index;
+      if (currentMatch !== null) {
+        matcher.match = currentMatch;
+        const lowestIndex = currentMatcher && currentMatcher.match.index;
         const currentIndex = matcher.match.index;
 
-        if (!acc || index > currentIndex) {
-          acc = matcher;
+        if (currentMatcher === null || currentIndex < lowestIndex) {
+          currentMatcher = matcher;
         }
       }
 
-      return acc;
+      return currentMatcher;
     }, null);
   }
 
   generateComponent(matcher) {
-    const { component, props, match } = matcher;
-    console.log("matcher", matcher);
+    const { component, match, innerText } = matcher;
+    let { props } = matcher;
 
     if (typeof props === "function") {
-      return React.createElement(
-        component,
-        props(match),
-        this.generateComponentList(match[1])
-      );
+      props = props(match);
     }
-
+    console.log(match);
     return React.createElement(
       component,
       props,
-      this.generateComponentList(match[1])
+      this.generateComponentList(innerText(match), match[0])
     );
   }
 
-  generateComponentList(text) {
+  generateComponentList(text, prevMatch) {
     const { matchers } = this.props;
     let matchersKeys = Object.keys(matchers);
-    // const index = matchersKeys.indexOf(key);
-
-    // if (matchersKeys.indexOf(key) !== -1) {
-    //   matchersKeys = matchersKeys.slice(index, 1);
-    // }
-
-    // console.log("matchersKeys", matchersKeys);
-    // console.log("key", key);
-    // console.log("index", index);
-
     let str = text;
     let components = [];
-    let hasMatcher =
-      matchersKeys.filter(key => matchers[key].regex.exec(str)).length !== 0;
 
-    while (hasMatcher && str !== "") {
+    while (str !== "") {
       const currentMatcher = this.getCurrentMatcher(matchersKeys, str);
 
-      if (!currentMatcher) {
-        console.log("bye");
+      if (!currentMatcher || prevMatch === currentMatcher.match[0]) {
         break;
       }
 
@@ -78,11 +61,12 @@ class Componentify extends Component {
         matchIndex + currentMatcher.match[0].length
       );
       str = textAfterMatch;
-      console.log("hey");
-      components.push(
-        this.getPlainTextComponent(textBeforeMatch),
-        this.generateComponent(currentMatcher)
-      );
+
+      if (textBeforeMatch !== "") {
+        components.push(this.getPlainTextComponent(textBeforeMatch));
+      }
+
+      components.push(this.generateComponent(currentMatcher));
     }
 
     if (str !== "") {

@@ -4,36 +4,53 @@ import "./index.css";
 import Componentify from "./Componentify";
 import registerServiceWorker from "./registerServiceWorker";
 
-const MyComponent = ({ text }) => {
-  return <span style={{ fontStyle: "italic" }}>{text}</span>;
+//const LINK_REGEXP = /https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9]\.[^\s]{2,}(\[\w+\])/;
+const LINK_REGEXP = /(https?:\/\/[\w.]+)(?:\[(.+)\])?/;
+const BOLD_REGEXP = /\*(.+)\*/;
+const ITALIC_REGEXP = /_(.+)_/;
+const HELLO_REGEX = /(hello)\[(bye)\]/;
+
+const MyComponent = ({ children }) => {
+  return <span style={{ fontStyle: "italic" }}>{children}</span>;
 };
 
 ReactDOM.render(
   <Componentify
-    text="*haha bold1 _italic_* is *this _love_*"
+    text="hello[bye] https://www.google.com[Google]"
     matchers={{
       bold: {
-        regex: /\*([\w\d\s]+)\*/,
+        regex: BOLD_REGEXP,
         component: "span",
         props: {
           style: { fontWeight: "900" }
-        }
+        },
+        innerText: matches => matches[2] || matches[1]
       },
       link: {
-        regex: /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9]\.[^\s]{2,})/,
+        regex: LINK_REGEXP,
         component: "a",
         props: ([_, url]) => {
           return { href: url, targer: "_blank" };
-        }
+        },
+        innerText: matches => matches[2] || matches[1]
       },
       italic: {
-        regex: /\_([\w\d]+)\_/,
+        regex: ITALIC_REGEXP,
         component: MyComponent,
         props: ([_, text]) => {
           return {
             text: text
           };
-        }
+        },
+        innerText: matches => matches[2] || matches[1]
+      },
+      hello: {
+        regex: HELLO_REGEX,
+        component: "span",
+        props: {
+          style: { color: "red" }
+        },
+        innerText: matches => matches[2] || matches[1]
       }
     }}
   />,
