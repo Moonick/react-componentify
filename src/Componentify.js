@@ -11,6 +11,11 @@ class Componentify extends Component {
     return matchersKeys.reduce((currentMatcher, key) => {
       const matcher = Object.assign({}, matchers[key]);
       const regex = matcher.regex;
+
+      if (!regex) {
+        throw new Error("Invalid regex");
+      }
+
       const currentMatch = regex.exec(text);
 
       if (currentMatch !== null) {
@@ -28,18 +33,24 @@ class Componentify extends Component {
   }
 
   generateComponent(matcher) {
-    const { component, match, innerText } = matcher;
+    const { component, match } = matcher;
     let { props } = matcher;
+    let { innerText } = matcher;
+    let children = null;
 
     if (typeof props === "function") {
       props = props(match);
     }
-    console.log(match);
-    return React.createElement(
-      component,
-      props,
-      this.generateComponentList(innerText(match), match[0])
-    );
+
+    if (typeof innerText === "function") {
+      innerText = innerText(match);
+    }
+
+    if (typeof innerText !== "undefined") {
+      children = this.generateComponentList(innerText, match[0]);
+    }
+
+    return React.createElement(component, props, children);
   }
 
   generateComponentList(text, prevMatch) {
@@ -77,8 +88,17 @@ class Componentify extends Component {
   }
 
   render() {
-    const { text } = this.props;
-    return this.generateComponentList(text, null);
+    const { text, matchers } = this.props;
+
+    if (!text) {
+      throw new Error('Missing property "text"');
+    }
+
+    if (!matchers) {
+      return this.getPlainTextComponent(text);
+    }
+
+    return this.generateComponentList(text, "");
   }
 }
 
