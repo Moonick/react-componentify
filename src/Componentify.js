@@ -80,10 +80,12 @@ class Componentify extends Component {
       components.push(this.generateComponent(currentMatcher));
     }
 
-    if (str !== "" && prevMatch !== "") {
-      components.push(str);
-    } else {
-      components.push(this.getPlainTextComponent(str));
+    if (str !== "") {
+      if (prevMatch !== "") {
+        components.push(str);
+      } else {
+        components.push(this.getPlainTextComponent(str));
+      }
     }
 
     return components;

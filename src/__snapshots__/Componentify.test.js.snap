@@ -24,9 +24,6 @@ Array [
     >
         italic
     </span>
-    <span>
-        
-    </span>
 </span>,
   <span>
      text
@@ -35,9 +32,15 @@ Array [
 `;
 
 exports[`<Componentify /> without nesting renders text with <br /> tag 1`] = `
-<span>
-  this is &lt;br /&gt; link
-</span>
+Array [
+  <span>
+    this is 
+</span>,
+  <br />,
+  <span>
+     link
+</span>,
+]
 `;
 
 exports[`<Componentify /> without nesting renders text with bold words 1`] = `
@@ -55,7 +58,19 @@ Array [
     text
 </span>,
   <span>
-    
+     and 
+</span>,
+  <span
+    style={
+        Object {
+            "fontWeight": "900",
+          }
+    }
+>
+    more
+</span>,
+  <span>
+     text
 </span>,
 ]
 `;
@@ -75,7 +90,7 @@ Array [
     text
 </span>,
   <span>
-    
+     more text
 </span>,
 ]
 `;
@@ -87,9 +102,6 @@ Array [
 </span>,
   <span>
     Snow
-</span>,
-  <span>
-    
 </span>,
 ]
 `;

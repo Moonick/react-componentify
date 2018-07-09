@@ -4,8 +4,8 @@ import renderer from "react-test-renderer";
 import Componentify from "./Componentify";
 
 const LINK_REGEX = /(https?:\/\/[\w.]+)(?:\[(.+)\])?/;
-const BOLD_REGEX = /\*(.+)\*/;
-const ITALIC_REGEX = /_(.+)_/;
+const BOLD_REGEX = /\*([\w\d\s\:\/\.\[\]]+)\*/;
+const ITALIC_REGEX = /\_([\w\d\s\:\/\.\[\]]+)\_/;
 const SWAP_REGEX = /John/;
 const BR_REGEX = /<br\/>/;
 
@@ -20,33 +20,10 @@ describe("<Componentify />", () => {
     });
 
     it("renders text with bold words", () => {
-      const div = document.createElement("div");
-
-      ReactDOM.render(
-        <Componentify
-          text={"this is bold *text*"}
-          matchers={{
-            bold: {
-              regex: BOLD_REGEX,
-              component: "span",
-              props: {
-                style: { fontWeight: "900" }
-              },
-              innerText: matches => matches[1]
-            }
-          }}
-        />,
-        div
-      );
-
-      ReactDOM.unmountComponentAtNode(div);
-    });
-
-    it("renders text with bold words", () => {
       const tree = renderer
         .create(
           <Componentify
-            text={"this is bold *text*"}
+            text={"this is bold *text* and *more* text"}
             matchers={{
               bold: {
                 regex: BOLD_REGEX,
@@ -67,7 +44,7 @@ describe("<Componentify />", () => {
       const tree = renderer
         .create(
           <Componentify
-            text={"this is italic _text_"}
+            text={"this is italic _text_ more text"}
             matchers={{
               italic: {
                 regex: ITALIC_REGEX,
@@ -132,7 +109,7 @@ describe("<Componentify />", () => {
       const tree = renderer
         .create(
           <Componentify
-            text={"this is <br /> link"}
+            text={"this is <br/> link"}
             matchers={{
               br: {
                 regex: BR_REGEX,
@@ -152,7 +129,7 @@ describe("<Componentify />", () => {
             text={"this is my name John"}
             matchers={{
               swap: {
-                regex: SWAP_REGEX,
+                regex: /John/,
                 component: "span",
                 innerText: "Snow"
               }

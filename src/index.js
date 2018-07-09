@@ -5,10 +5,9 @@ import Componentify from "./Componentify";
 import ErrorBoundary from "./ErrorBoundary";
 import registerServiceWorker from "./registerServiceWorker";
 
-const LINK_REGEXP = /(https?:\/\/[\w.]+)(?:\[(.+)\])?/;
-const BOLD_REGEXP = /\*([\w\d\s\_\.\:\/\/]+)\*/;
-const ITALIC_REGEXP = /\_([\w\d\s\*\.\:\/\/]+)\_/;
-const HELLO_REGEX = /hello/;
+const LINK_REGEX = /(https?:\/\/[\w.]+)(?:\[(.+)\])?/;
+const BOLD_REGEX = /\*([\w\d\s\:\/\.\[\]]+)\*/;
+const ITALIC_REGEX = /\_([\w\d\s\:\/\.\[\]]+)\_/;
 const BR_REGEX = /<br\/>/;
 
 const MyComponent = ({ children }) => {
@@ -18,26 +17,18 @@ const MyComponent = ({ children }) => {
 ReactDOM.render(
   <ErrorBoundary>
     <Componentify
-      text="*hey _hello_* hi this _is the *key*_ <br/> hey https://google.com[google] hih"
+      text={"this is my *hey _name_ https://google.com[google] is* John"}
       matchers={{
         bold: {
-          regex: BOLD_REGEXP,
+          regex: BOLD_REGEX,
           component: "span",
           props: {
             style: { fontWeight: "900" }
           },
           innerText: matches => matches[1]
         },
-        link: {
-          regex: LINK_REGEXP,
-          component: "a",
-          props: ([_, url]) => {
-            return { href: url, targer: "_blank" };
-          },
-          innerText: matches => matches[2] || matches[1]
-        },
         italic: {
-          regex: ITALIC_REGEXP,
+          regex: ITALIC_REGEX,
           component: MyComponent,
           props: ([_, text]) => {
             return {
@@ -46,17 +37,13 @@ ReactDOM.render(
           },
           innerText: matches => matches[2] || matches[1]
         },
-        hello: {
-          regex: HELLO_REGEX,
-          component: "span",
-          props: {
-            style: { color: "red" }
+        link: {
+          regex: LINK_REGEX,
+          component: "a",
+          props: ([_, url]) => {
+            return { href: url, targer: "_blank" };
           },
-          innerText: "bye"
-        },
-        br: {
-          regex: BR_REGEX,
-          component: "br"
+          innerText: matches => matches[2] || matches[1]
         }
       }}
     />
