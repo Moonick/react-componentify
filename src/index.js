@@ -6,8 +6,8 @@ import ErrorBoundary from "./ErrorBoundary";
 import registerServiceWorker from "./registerServiceWorker";
 
 const LINK_REGEXP = /(https?:\/\/[\w.]+)(?:\[(.+)\])?/;
-const BOLD_REGEXP = /\*(.+)\*/;
-const ITALIC_REGEXP = /_(.+)_/;
+const BOLD_REGEXP = /\*([\w\d\s\_\.\:\/\/]+)\*/;
+const ITALIC_REGEXP = /\_([\w\d\s\*\.\:\/\/]+)\_/;
 const HELLO_REGEX = /hello/;
 const BR_REGEX = /<br\/>/;
 
@@ -18,7 +18,7 @@ const MyComponent = ({ children }) => {
 ReactDOM.render(
   <ErrorBoundary>
     <Componentify
-      text="hello *hahah* <br/> hey https://google.com[google]"
+      text="*hey _hello_* hi this _is the *key*_ <br/> hey https://google.com[google] hih"
       matchers={{
         bold: {
           regex: BOLD_REGEXP,

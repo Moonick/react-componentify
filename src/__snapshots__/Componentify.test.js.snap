@@ -1,0 +1,129 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Componentify /> with nesting renders text with bold and italic words 1`] = `
+Array [
+  <span>
+    this is my name 
+</span>,
+  <span
+    style={
+        Object {
+            "fontWeight": "900",
+          }
+    }
+>
+    <span>
+        bold and 
+    </span>
+    <span
+        style={
+            Object {
+                "fontStyle": "italic",
+              }
+        }
+    >
+        italic
+    </span>
+    <span>
+        
+    </span>
+</span>,
+  <span>
+     text
+</span>,
+]
+`;
+
+exports[`<Componentify /> without nesting renders text with <br /> tag 1`] = `
+<span>
+  this is &lt;br /&gt; link
+</span>
+`;
+
+exports[`<Componentify /> without nesting renders text with bold words 1`] = `
+Array [
+  <span>
+    this is bold 
+</span>,
+  <span
+    style={
+        Object {
+            "fontWeight": "900",
+          }
+    }
+>
+    text
+</span>,
+  <span>
+    
+</span>,
+]
+`;
+
+exports[`<Componentify /> without nesting renders text with italic words 1`] = `
+Array [
+  <span>
+    this is italic 
+</span>,
+  <span
+    style={
+        Object {
+            "fontStyle": "italic",
+          }
+    }
+>
+    text
+</span>,
+  <span>
+    
+</span>,
+]
+`;
+
+exports[`<Componentify /> without nesting renders text with swap words 1`] = `
+Array [
+  <span>
+    this is my name 
+</span>,
+  <span>
+    Snow
+</span>,
+  <span>
+    
+</span>,
+]
+`;
+
+exports[`<Componentify /> without nesting text with link renders text with link with name 1`] = `
+Array [
+  <span>
+    this is 
+</span>,
+  <a
+    href="https://google.com"
+    targer="_blank"
+>
+    google
+</a>,
+  <span>
+     link
+</span>,
+]
+`;
+
+exports[`<Componentify /> without nesting text with link renders text with link without name 1`] = `
+Array [
+  <span>
+    this is 
+</span>,
+  <a
+    href="https://google.com"
+    targer="_blank"
+>
+    https://google.com
+</a>,
+  <span>
+     link
+</span>,
+]
+`;
