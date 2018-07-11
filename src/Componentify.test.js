@@ -2,6 +2,11 @@ import React from "react";
 import ReactDOM from "react-dom";
 import renderer from "react-test-renderer";
 import Componentify from "./Componentify";
+// import MyComponent from ".";
+
+const MyComponent = ({ children }) => {
+  return <span style={{ fontStyle: "italic" }}>{children}</span>;
+};
 
 const LINK_REGEX = /(https?:\/\/[\w.]+)(?:\[(.+)\])?/;
 const BOLD_REGEX = /\*([\w\d\s\:\/\.\[\]]+)\*/;
@@ -163,6 +168,60 @@ describe("<Componentify />", () => {
                   style: { fontStyle: "italic" }
                 },
                 innerText: matches => matches[1]
+              }
+            }}
+          />
+        )
+        .toJSON();
+      expect(tree).toMatchSnapshot();
+    });
+
+    it("renders text with bold link", () => {
+      const tree = renderer
+        .create(
+          <Componentify
+            text={"this is my bold *https://google.com* link"}
+            matchers={{
+              bold: {
+                regex: BOLD_REGEX,
+                component: "span",
+                props: {
+                  style: { fontWeight: "900" }
+                },
+                innerText: matches => matches[1]
+              },
+              link: {
+                regex: LINK_REGEX,
+                component: "a",
+                props: ([_, url]) => {
+                  return { href: url, targer: "_blank" };
+                },
+                innerText: matches => matches[2] || matches[1]
+              }
+            }}
+          />
+        )
+        .toJSON();
+      expect(tree).toMatchSnapshot();
+    });
+  });
+
+  describe("with custom component", () => {
+    it("renders text with italic", () => {
+      const tree = renderer
+        .create(
+          <Componentify
+            text={"this is my italic _text_"}
+            matchers={{
+              italic: {
+                regex: ITALIC_REGEX,
+                component: MyComponent,
+                props: ([_, text]) => {
+                  return {
+                    text: text
+                  };
+                },
+                innerText: matches => matches[2] || matches[1]
               }
             }}
           />

@@ -1,5 +1,22 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`<Componentify /> with custom component renders text with italic 1`] = `
+Array [
+  <span>
+    this is my italic 
+</span>,
+  <span
+    style={
+        Object {
+            "fontStyle": "italic",
+          }
+    }
+>
+    text
+</span>,
+]
+`;
+
 exports[`<Componentify /> with nesting renders text with bold and italic words 1`] = `
 Array [
   <span>
@@ -27,6 +44,31 @@ Array [
 </span>,
   <span>
      text
+</span>,
+]
+`;
+
+exports[`<Componentify /> with nesting renders text with bold link 1`] = `
+Array [
+  <span>
+    this is my bold 
+</span>,
+  <span
+    style={
+        Object {
+            "fontWeight": "900",
+          }
+    }
+>
+    <a
+        href="https://google.com"
+        targer="_blank"
+    >
+        https://google.com
+    </a>
+</span>,
+  <span>
+     link
 </span>,
 ]
 `;
