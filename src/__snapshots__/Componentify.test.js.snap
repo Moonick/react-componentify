@@ -20,7 +20,7 @@ Array [
 exports[`<Componentify /> with nesting renders text with bold and italic words 1`] = `
 Array [
   <span>
-    this is my name 
+    this is my 
 </span>,
   <span
     style={
@@ -137,10 +137,10 @@ Array [
 ]
 `;
 
-exports[`<Componentify /> without nesting renders text with swap words 1`] = `
+exports[`<Componentify /> without nesting renders text with replaced words 1`] = `
 Array [
   <span>
-    this is my name 
+    My name is 
 </span>,
   <span>
     Snow

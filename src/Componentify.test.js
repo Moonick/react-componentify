@@ -1,18 +1,14 @@
+// @flow
+
 import React from "react";
 import ReactDOM from "react-dom";
 import renderer from "react-test-renderer";
 import Componentify from "./Componentify";
-// import MyComponent from ".";
+import { LINK_REGEX, BOLD_REGEX, ITALIC_REGEX, BR_REGEX } from "./regexes";
 
 const MyComponent = ({ children }) => {
   return <span style={{ fontStyle: "italic" }}>{children}</span>;
 };
-
-const LINK_REGEX = /(https?:\/\/[\w.]+)(?:\[(.+)\])?/;
-const BOLD_REGEX = /\*([\w\d\s\:\/\.\[\]]+)\*/;
-const ITALIC_REGEX = /\_([\w\d\s\:\/\.\[\]]+)\_/;
-const SWAP_REGEX = /John/;
-const BR_REGEX = /<br\/>/;
 
 describe("<Componentify />", () => {
   describe("without nesting", () => {
@@ -127,13 +123,13 @@ describe("<Componentify />", () => {
       expect(tree).toMatchSnapshot();
     });
 
-    it("renders text with swap words", () => {
+    it("renders text with replaced words", () => {
       const tree = renderer
         .create(
           <Componentify
-            text={"this is my name John"}
+            text={"My name is John"}
             matchers={{
-              swap: {
+              replace: {
                 regex: /John/,
                 component: "span",
                 innerText: "Snow"
@@ -151,7 +147,7 @@ describe("<Componentify />", () => {
       const tree = renderer
         .create(
           <Componentify
-            text={"this is my name *bold and _italic_* text"}
+            text={"this is my *bold and _italic_* text"}
             matchers={{
               bold: {
                 regex: BOLD_REGEX,

@@ -1,14 +1,28 @@
+// @flow
 import React, { Component } from "react";
+type PropsObj = { [key: string]: { [key: string]: string } };
+type PropsFunc = (Array<string>) => { [key: string]: string };
+type Matcher = {
+  regex: RegExp,
+  component: string | (() => void),
+  props: PropsObj | (() => void),
+  innerText: () => void
+};
 
-class Componentify extends Component {
-  getPlainTextComponent(text) {
+type ComponentifyProps = {
+  text: string,
+  matchers: { [key: string]: Matcher }
+};
+
+class Componentify extends Component<ComponentifyProps, {}> {
+  getPlainTextComponent(text: string) {
     return <span>{text}</span>;
   }
 
-  getCurrentMatcher(matchersKeys, text) {
+  getCurrentMatcher(matchersKeys: Array<string>, text: string) {
     const { matchers } = this.props;
 
-    return matchersKeys.reduce((currentMatcher, key) => {
+    return matchersKeys.reduce((currentMatcher, key: string) => {
       const matcher = Object.assign({}, matchers[key]);
       const regex = matcher.regex;
 
@@ -53,7 +67,7 @@ class Componentify extends Component {
     return React.createElement(component, props, children);
   }
 
-  generateComponentList(text, prevMatch) {
+  generateComponentList(text: string, prevMatch) {
     const { matchers } = this.props;
     let matchersKeys = Object.keys(matchers);
     let str = text;

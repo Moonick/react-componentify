@@ -1,14 +1,12 @@
+// @flow
+
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 import Componentify from "./Componentify";
 import ErrorBoundary from "./ErrorBoundary";
 import registerServiceWorker from "./registerServiceWorker";
-
-const LINK_REGEX = /(https?:\/\/[\w.]+)(?:\[(.+)\])?/;
-const BOLD_REGEX = /\*([\w\d\s\:\/\.\[\]]+)\*/;
-const ITALIC_REGEX = /\_([\w\d\s\:\/\.\[\]]+)\_/;
-const BR_REGEX = /<br\/>/;
+import { LINK_REGEX, BOLD_REGEX, ITALIC_REGEX, BR_REGEX } from "./regexes";
 
 const MyComponent = ({ children }) => {
   return <span style={{ fontStyle: "italic" }}>{children}</span>;
