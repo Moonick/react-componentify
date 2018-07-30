@@ -1,10 +1,14 @@
-// @flow
-
 import React from "react";
 import ReactDOM from "react-dom";
 import renderer from "react-test-renderer";
 import Componentify from "./Componentify";
-import { LINK_REGEX, BOLD_REGEX, ITALIC_REGEX, BR_REGEX } from "./regexes";
+import { ITALIC_REGEX } from "./regexes";
+import {
+  boldConverter,
+  italicConverter,
+  linkConverter,
+  brTagConverter
+} from "./converters";
 
 const MyComponent = ({ children }) => {
   return <span style={{ fontStyle: "italic" }}>{children}</span>;
@@ -24,17 +28,8 @@ describe("<Componentify />", () => {
       const tree = renderer
         .create(
           <Componentify
-            text={"this is bold *text* and *more* text"}
-            matchers={{
-              bold: {
-                regex: BOLD_REGEX,
-                component: "span",
-                props: {
-                  style: { fontWeight: "900" }
-                },
-                innerText: matches => matches[1]
-              }
-            }}
+            text={"Тhis is bold *text* and *more* text"}
+            converters={[boldConverter]}
           />
         )
         .toJSON();
@@ -45,17 +40,8 @@ describe("<Componentify />", () => {
       const tree = renderer
         .create(
           <Componentify
-            text={"this is italic _text_ more text"}
-            matchers={{
-              italic: {
-                regex: ITALIC_REGEX,
-                component: "span",
-                props: {
-                  style: { fontStyle: "italic" }
-                },
-                innerText: matches => matches[1]
-              }
-            }}
+            text={"Тhis is italic _text_ more text"}
+            converters={[italicConverter]}
           />
         )
         .toJSON();
@@ -67,17 +53,8 @@ describe("<Componentify />", () => {
         const tree = renderer
           .create(
             <Componentify
-              text={"this is https://google.com[google] link"}
-              matchers={{
-                link: {
-                  regex: LINK_REGEX,
-                  component: "a",
-                  props: ([_, url]) => {
-                    return { href: url, targer: "_blank" };
-                  },
-                  innerText: matches => matches[2] || matches[1]
-                }
-              }}
+              text={"Тhis is https://google.com[google] link"}
+              converters={[linkConverter]}
             />
           )
           .toJSON();
@@ -88,17 +65,8 @@ describe("<Componentify />", () => {
         const tree = renderer
           .create(
             <Componentify
-              text={"this is https://google.com link"}
-              matchers={{
-                link: {
-                  regex: LINK_REGEX,
-                  component: "a",
-                  props: ([_, url]) => {
-                    return { href: url, targer: "_blank" };
-                  },
-                  innerText: matches => matches[2] || matches[1]
-                }
-              }}
+              text={"Тhis is https://google.com link"}
+              converters={[linkConverter]}
             />
           )
           .toJSON();
@@ -110,13 +78,8 @@ describe("<Componentify />", () => {
       const tree = renderer
         .create(
           <Componentify
-            text={"this is <br/> link"}
-            matchers={{
-              br: {
-                regex: BR_REGEX,
-                component: "br"
-              }
-            }}
+            text={"Тhis is line one<br/>This is line two"}
+            converters={[brTagConverter]}
           />
         )
         .toJSON();
@@ -128,13 +91,13 @@ describe("<Componentify />", () => {
         .create(
           <Componentify
             text={"My name is John"}
-            matchers={{
-              replace: {
+            converters={[
+              {
                 regex: /John/,
                 component: "span",
                 innerText: "Snow"
               }
-            }}
+            ]}
           />
         )
         .toJSON();
@@ -147,25 +110,8 @@ describe("<Componentify />", () => {
       const tree = renderer
         .create(
           <Componentify
-            text={"this is my *bold and _italic_* text"}
-            matchers={{
-              bold: {
-                regex: BOLD_REGEX,
-                component: "span",
-                props: {
-                  style: { fontWeight: "900" }
-                },
-                innerText: matches => matches[1]
-              },
-              italic: {
-                regex: ITALIC_REGEX,
-                component: "span",
-                props: {
-                  style: { fontStyle: "italic" }
-                },
-                innerText: matches => matches[1]
-              }
-            }}
+            text={"Тhis is my *bold and _italic_* text"}
+            converters={[boldConverter, italicConverter]}
           />
         )
         .toJSON();
@@ -176,25 +122,8 @@ describe("<Componentify />", () => {
       const tree = renderer
         .create(
           <Componentify
-            text={"this is my bold *https://google.com* link"}
-            matchers={{
-              bold: {
-                regex: BOLD_REGEX,
-                component: "span",
-                props: {
-                  style: { fontWeight: "900" }
-                },
-                innerText: matches => matches[1]
-              },
-              link: {
-                regex: LINK_REGEX,
-                component: "a",
-                props: ([_, url]) => {
-                  return { href: url, targer: "_blank" };
-                },
-                innerText: matches => matches[2] || matches[1]
-              }
-            }}
+            text={"Тhis is my bold *https://google.com* link"}
+            converters={[boldConverter, linkConverter]}
           />
         )
         .toJSON();
@@ -207,9 +136,9 @@ describe("<Componentify />", () => {
       const tree = renderer
         .create(
           <Componentify
-            text={"this is my italic _text_"}
-            matchers={{
-              italic: {
+            text={"Тhis is my italic _text_"}
+            converters={[
+              {
                 regex: ITALIC_REGEX,
                 component: MyComponent,
                 props: ([_, text]) => {
@@ -219,7 +148,7 @@ describe("<Componentify />", () => {
                 },
                 innerText: matches => matches[2] || matches[1]
               }
-            }}
+            ]}
           />
         )
         .toJSON();

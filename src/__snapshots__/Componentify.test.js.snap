@@ -3,7 +3,7 @@
 exports[`<Componentify /> with custom component renders text with italic 1`] = `
 Array [
   <span>
-    this is my italic 
+    Тhis is my italic 
 </span>,
   <span
     style={
@@ -20,7 +20,7 @@ Array [
 exports[`<Componentify /> with nesting renders text with bold and italic words 1`] = `
 Array [
   <span>
-    this is my 
+    Тhis is my 
 </span>,
   <span
     style={
@@ -51,7 +51,7 @@ Array [
 exports[`<Componentify /> with nesting renders text with bold link 1`] = `
 Array [
   <span>
-    this is my bold 
+    Тhis is my bold 
 </span>,
   <span
     style={
@@ -61,10 +61,10 @@ Array [
     }
 >
     <a
-        href="https://google.com"
+        href="https://"
         targer="_blank"
     >
-        https://google.com
+        google
     </a>
 </span>,
   <span>
@@ -76,11 +76,11 @@ Array [
 exports[`<Componentify /> without nesting renders text with <br /> tag 1`] = `
 Array [
   <span>
-    this is 
+    Тhis is line one
 </span>,
   <br />,
   <span>
-     link
+    This is line two
 </span>,
 ]
 `;
@@ -88,7 +88,7 @@ Array [
 exports[`<Componentify /> without nesting renders text with bold words 1`] = `
 Array [
   <span>
-    this is bold 
+    Тhis is bold 
 </span>,
   <span
     style={
@@ -120,7 +120,7 @@ Array [
 exports[`<Componentify /> without nesting renders text with italic words 1`] = `
 Array [
   <span>
-    this is italic 
+    Тhis is italic 
 </span>,
   <span
     style={
@@ -151,10 +151,10 @@ Array [
 exports[`<Componentify /> without nesting text with link renders text with link with name 1`] = `
 Array [
   <span>
-    this is 
+    Тhis is 
 </span>,
   <a
-    href="https://google.com"
+    href="https://"
     targer="_blank"
 >
     google
@@ -168,16 +168,13 @@ Array [
 exports[`<Componentify /> without nesting text with link renders text with link without name 1`] = `
 Array [
   <span>
-    this is 
+    Тhis is 
 </span>,
   <a
-    href="https://google.com"
+    href="https://"
     targer="_blank"
 >
-    https://google.com
+    google
 </a>,
-  <span>
-     link
-</span>,
 ]
 `;

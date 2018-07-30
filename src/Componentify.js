@@ -1,30 +1,41 @@
 // @flow
 import React, { Component } from "react";
+
+type Match = RegExp$matchResult;
 type PropsObj = { [key: string]: { [key: string]: string } };
-type PropsFunc = (Array<string>) => { [key: string]: string };
-type Matcher = {
+
+type PropsFunc = Match => { [key: string]: string };
+
+type Converter = {
   regex: RegExp,
   component: string | (() => void),
-  props: PropsObj | (() => void),
-  innerText: () => void
+  props?: PropsObj | PropsFunc,
+  innerText?: Match => void,
+  match?: Match
 };
 
 type ComponentifyProps = {
   text: string,
-  matchers: { [key: string]: Matcher }
+  converters: Array<Converter>
 };
 
 class Componentify extends Component<ComponentifyProps, {}> {
-  getPlainTextComponent(text: string) {
-    return <span>{text}</span>;
+  static defaultProps = {
+    text: "",
+    converters: []
+  };
+
+  getPlainTextComponent(text: string, key?: string) {
+    return <span key={key}>{text}</span>;
   }
 
-  getCurrentMatcher(matchersKeys: Array<string>, text: string) {
-    const { matchers } = this.props;
+  getCurrentConverter(text: string) {
+    const { converters } = this.props;
 
-    return matchersKeys.reduce((currentMatcher, key: string) => {
-      const matcher = Object.assign({}, matchers[key]);
-      const regex = matcher.regex;
+    return converters.reduce((currtentConverter, converter) => {
+      // Clone so mutating doesn't affect client-passed objects
+      converter = Object.assign({}, converter);
+      const regex = converter.regex;
 
       if (!regex) {
         throw new Error("Invalid regex");
@@ -33,27 +44,31 @@ class Componentify extends Component<ComponentifyProps, {}> {
       const currentMatch = regex.exec(text);
 
       if (currentMatch !== null) {
-        matcher.match = currentMatch;
-        const lowestIndex = currentMatcher && currentMatcher.match.index;
-        const currentIndex = matcher.match.index;
+        converter.match = currentMatch;
+        const lowestIndex = currtentConverter && currtentConverter.match.index;
+        const currentIndex = converter.index;
 
-        if (currentMatcher === null || currentIndex < lowestIndex) {
-          currentMatcher = matcher;
+        if (currtentConverter === null || currentIndex < lowestIndex) {
+          currtentConverter = converter;
         }
       }
 
-      return currentMatcher;
+      return currtentConverter;
     }, null);
   }
 
-  generateComponent(matcher) {
-    const { component, match } = matcher;
-    let { props } = matcher;
-    let { innerText } = matcher;
+  generateComponent(converter: Converter, key: string): React$CreateElement {
+    const { component, match } = converter;
+    let { props } = converter;
+    let { innerText } = converter;
     let children = null;
 
     if (typeof props === "function") {
       props = props(match);
+    }
+
+    if (props) {
+      props.key = key;
     }
 
     if (typeof innerText === "function") {
@@ -67,38 +82,45 @@ class Componentify extends Component<ComponentifyProps, {}> {
     return React.createElement(component, props, children);
   }
 
-  generateComponentList(text: string, prevMatch) {
-    const { matchers } = this.props;
-    let matchersKeys = Object.keys(matchers);
+  generateComponentList(text: string, prevMatch: string) {
     let str = text;
     let components = [];
 
     while (str !== "") {
-      const currentMatcher = this.getCurrentMatcher(matchersKeys, str);
+      const currtentConverter = this.getCurrentConverter(str);
 
-      if (!currentMatcher || prevMatch === currentMatcher.match[0]) {
+      if (!currtentConverter || prevMatch === currtentConverter.match[0]) {
         break;
       }
 
-      const matchIndex = currentMatcher.match.index;
+      const matchIndex = currtentConverter.match.index;
       const textBeforeMatch = str.slice(0, matchIndex);
       const textAfterMatch = str.slice(
-        matchIndex + currentMatcher.match[0].length
+        matchIndex + currtentConverter.match[0].length
       );
       str = textAfterMatch;
 
       if (textBeforeMatch !== "") {
-        components.push(this.getPlainTextComponent(textBeforeMatch));
+        components.push(
+          this.getPlainTextComponent(
+            textBeforeMatch,
+            components.length.toString()
+          )
+        );
       }
 
-      components.push(this.generateComponent(currentMatcher));
+      components.push(
+        this.generateComponent(currtentConverter, components.length.toString())
+      );
     }
 
     if (str !== "") {
       if (prevMatch !== "") {
         components.push(str);
       } else {
-        components.push(this.getPlainTextComponent(str));
+        components.push(
+          this.getPlainTextComponent(str, components.length.toString())
+        );
       }
     }
 
@@ -106,13 +128,13 @@ class Componentify extends Component<ComponentifyProps, {}> {
   }
 
   render() {
-    const { text, matchers } = this.props;
+    const { text, converters } = this.props;
 
     if (!text) {
       throw new Error('Missing property "text"');
     }
 
-    if (!matchers) {
+    if (!converters) {
       return this.getPlainTextComponent(text);
     }
 
