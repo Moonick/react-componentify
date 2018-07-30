@@ -6,8 +6,8 @@
 - [Installation](#installation)
 - [Usage](#usage)
 - [Converters](#converters)
-- [Converters](#converters)
-- [Converters](#converters)
+- [Expamples without component nesting](#expamples-without-component-nesting)
+- [Expamples with component nesting](#expamples-with-component-nesting)
 
 ## NPM package
 
@@ -109,7 +109,7 @@ ComponentifyProps = {
 }
 ```
 
-### Use case without component nesting
+## Expamples without component nesting
 
 - Style parts of text in bold
 
@@ -180,7 +180,7 @@ import Componentify from "componentify-react";
 />;
 ```
 
-### Use case with component nesting
+## Expamples with component nesting
 
 - Style parts of bold text in italic
 

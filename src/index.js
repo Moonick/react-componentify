@@ -9,7 +9,7 @@ import { boldConverter, italicConverter, linkConverter } from "./converters";
 ReactDOM.render(
   <ErrorBoundary>
     <Componentify
-      text={"this is my *hey _name_ https://google.com[google] is* John"}
+      text={"This is my *_link_ https://google.com[google]* and it's awesome"}
       converters={[boldConverter, italicConverter, linkConverter]}
     />
   </ErrorBoundary>,
