@@ -2,7 +2,7 @@
 
 ## Table of Contents
 
-- [NPM package](www)
+- [NPM package](www.npmjs.com/package/react-componentify)
 - [Installation](#installation)
 - [Usage](#usage)
 - [Converters](#converters)
@@ -10,6 +10,8 @@
 - [Expamples with component nesting](#expamples-with-component-nesting)
 
 ## NPM package
+
+www.npmjs.com/package/react-componentify
 
 ## Installation
 
