@@ -2,6 +2,8 @@
   "name": "react-componentify",
   "version": "1.0.0",
   "private": true,
+  "author": "Simona Peneva <peneva.simona@gmail.com>",
+  "main": "react-componentify.js",
   "dependencies": {
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
@@ -22,6 +24,7 @@
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-preset-flow": "^6.23.0",
+    "babel-preset-stage-2": "^6.24.1",
     "flow-bin": "^0.76.0"
   }
 }
