@@ -1,9 +1,9 @@
 {
   "name": "react-componentify",
   "version": "1.0.0",
-  "private": true,
+  "private": false,
   "author": "Simona Peneva <peneva.simona@gmail.com>",
-  "main": "react-componentify.js",
+  "main": "Componentify.js",
   "dependencies": {
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
@@ -16,7 +16,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "babel src/ -d lib/",
-    "prepublish": "npm run build",
+    "prepublish": "babel src/Componentify.js --out-file Componentify.js",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "flow": "flow"

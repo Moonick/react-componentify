@@ -1,10 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
-import Componentify from "./Componentify";
+import Componentify, {
+  boldConverter,
+  italicConverter,
+  linkConverter
+} from "./Componentify";
 import ErrorBoundary from "./ErrorBoundary";
 import registerServiceWorker from "./registerServiceWorker";
-import { boldConverter, italicConverter, linkConverter } from "./converters";
 
 ReactDOM.render(
   <ErrorBoundary>

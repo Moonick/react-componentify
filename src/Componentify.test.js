@@ -1,14 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import renderer from "react-test-renderer";
-import Componentify from "./Componentify";
-import { ITALIC_REGEX } from "./regexes";
-import {
+import Componentify, {
   boldConverter,
   italicConverter,
   linkConverter,
-  brTagConverter
-} from "./converters";
+  brTagConverter,
+  ITALIC_REGEX
+} from "./Componentify";
 
 const MyComponent = ({ children }) => {
   return <span style={{ fontStyle: "italic" }}>{children}</span>;

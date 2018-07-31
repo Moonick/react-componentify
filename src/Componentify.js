@@ -1,6 +1,45 @@
 // @flow
 import React, { Component } from "react";
 
+export const LINK_REGEX = new RegExp(
+  "(https?:\\/\\/)?([\\da-z\\.-]+)\\.([a-z\\.]{2,6})([\\/\\w \\.-]*)*\\/?(?:\\[(.+)\\])?"
+);
+export const BOLD_REGEX = new RegExp("\\*([\\w\\d\\s\\:\\/\\.\\[\\]]+)\\*");
+export const ITALIC_REGEX = new RegExp("\\_([\\w\\d\\s\\:\\/\\.\\[\\]]+)\\_");
+export const BR_REGEX = new RegExp("<br\\/>");
+
+export const boldConverter = {
+  regex: BOLD_REGEX,
+  component: "span",
+  props: {
+    style: { fontWeight: "900" }
+  },
+  innerText: matches => matches[1]
+};
+
+export const italicConverter = {
+  regex: ITALIC_REGEX,
+  component: "span",
+  props: {
+    style: { fontStyle: "italic" }
+  },
+  innerText: matches => matches[1]
+};
+
+export const linkConverter = {
+  regex: LINK_REGEX,
+  component: "a",
+  props: ([_, url]) => {
+    return { href: url, targer: "_blank" };
+  },
+  innerText: matches => matches[2] || matches[1]
+};
+
+export const brTagConverter = {
+  regex: BR_REGEX,
+  component: "br"
+};
+
 type Match = RegExp$matchResult;
 type PropsObj = { [key: string]: { [key: string]: string } };
 
