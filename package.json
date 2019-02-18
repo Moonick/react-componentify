@@ -15,8 +15,8 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "babel src/ -d lib/",
-    "prepublish": "babel src/Componentify.js --out-file lib/Componentify.js",
+    "build": "mkdir -p lib && babel src/ -d lib/",
+    "prepublish": "mkdir -p lib && babel src/Componentify.js --out-file lib/Componentify.js",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "flow": "flow"
