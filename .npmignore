@@ -1,3 +1,6 @@
-#local development
-/public
-/src
+node_modules
+src
+.babelrc
+.flowconfig
+.gitignore
+README.md

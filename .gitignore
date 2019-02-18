@@ -7,8 +7,7 @@
 /coverage
 
 # production
-/build
-/Componentify.js
+/lib
 
 # settings
 /.vscode

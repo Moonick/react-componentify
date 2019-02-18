@@ -2,11 +2,12 @@
 import React, { Component } from "react";
 
 export const LINK_REGEX = new RegExp(
-  "(https?:\\/\\/)?([\\da-z\\.-]+)\\.([a-z\\.]{2,6})([\\/\\w \\.-]*)*\\/?(?:\\[(.+)\\])?"
+  "(https?:\\/\\/)?([\\da-z\\.-]+)\\.([a-z\\.]{2,6})([\\/\\w \\.-]*)*\\/?(?:\\[(.+)\\])?",
+  "g"
 );
-export const BOLD_REGEX = new RegExp("\\*([\\w\\d\\s\\:\\/\\.\\[\\]]+)\\*");
-export const ITALIC_REGEX = new RegExp("\\_([\\w\\d\\s\\:\\/\\.\\[\\]]+)\\_");
-export const BR_REGEX = new RegExp("<br\\/>");
+export const BOLD_REGEX = new RegExp("\\*([\\w\\d\\s\\:\\/\\.\\[\\]]+)\\*", "g");
+export const ITALIC_REGEX = new RegExp("\\_([\\w\\d\\s\\:\\/\\.\\[\\]]+)\\_", "g");
+export const BR_REGEX = new RegExp("<br\\/>", "g");
 
 export const boldConverter = {
   regex: BOLD_REGEX,
@@ -61,11 +62,14 @@ type ComponentifyProps = {
 class Componentify extends Component<ComponentifyProps, {}> {
   static defaultProps = {
     text: "",
+    plainTextComponent: "span",
     converters: []
   };
 
   getPlainTextComponent(text: string, key?: string) {
-    return <span key={key}>{text}</span>;
+    const { plainTextComponent, plainTextStyle } = this.props
+
+    return React.createElement(plainTextComponent, { key, style: plainTextStyle }, text);
   }
 
   getCurrentConverter(text: string) {
@@ -74,10 +78,14 @@ class Componentify extends Component<ComponentifyProps, {}> {
     return converters.reduce((currtentConverter, converter) => {
       // Clone so mutating doesn't affect client-passed objects
       converter = Object.assign({}, converter);
-      const regex = converter.regex;
+      const regex = new RegExp(converter.regex);
 
       if (!regex) {
         throw new Error("Invalid regex");
+      }
+      
+      if(!regex.global) {
+        throw new Error("Regex missing global flag")
       }
 
       const currentMatch = regex.exec(text);
@@ -85,7 +93,7 @@ class Componentify extends Component<ComponentifyProps, {}> {
       if (currentMatch !== null) {
         converter.match = currentMatch;
         const lowestIndex = currtentConverter && currtentConverter.match.index;
-        const currentIndex = converter.index;
+        const currentIndex = converter.match.index;
 
         if (currtentConverter === null || currentIndex < lowestIndex) {
           currtentConverter = converter;
@@ -98,7 +106,7 @@ class Componentify extends Component<ComponentifyProps, {}> {
 
   generateComponent(converter: Converter, key: string): React$CreateElement {
     const { component, match } = converter;
-    let { props } = converter;
+    let { props = {} } = converter;
     let { innerText } = converter;
     let children = null;
 
@@ -106,9 +114,7 @@ class Componentify extends Component<ComponentifyProps, {}> {
       props = props(match);
     }
 
-    if (props) {
-      props.key = key;
-    }
+    props.key = key;
 
     if (typeof innerText === "function") {
       innerText = innerText(match);
