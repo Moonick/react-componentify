@@ -5,7 +5,7 @@ export const LINK_REGEX = new RegExp(
   "((?:https?:\/\/)?(?:[\da-z\.-]+)\.(?:[a-z\.]{2,6})(?:[-a-zA-Z0-9@:%_\+.~#?&//=]*)*\/?)(?:\[(.+?)\])?/",
   "g"
 );
-export const BOLD_REGEX = new RegExp("\<b\>(.+?)\<\/b\>", "g");
+export const BOLD_REGEX = new RegExp("\*(.+?)\*", "g");
 export const ITALIC_REGEX = new RegExp("\\_(.+?)\\_", "g");
 export const BR_REGEX = new RegExp("<br\\/>", "g");
 
@@ -77,7 +77,7 @@ class Componentify extends Component<ComponentifyProps, {}> {
 
     return converters.reduce((currtentConverter, converter) => {
       // Clone so mutating doesn't affect client-passed objects
-      converter = Object.assign({}, converter);
+      converter =  {...converter};
       const regex = new RegExp(converter.regex);
 
       if (!regex) {
