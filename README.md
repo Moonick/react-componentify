@@ -38,7 +38,7 @@ First, let's look at the built-in `Converter`s:
 
 ```js
 const boldConverter = {
-  regex: /\*([\w\d\s\:\/\.\[\]]+)\*/,
+  regex: /\*(.+?)\*/,
   component: "span",
   props: {
     style: { fontWeight: "900" }
@@ -51,7 +51,7 @@ const boldConverter = {
 
 ```js
 const italicConverter = {
-  regex: /\_([\w\d\s\:\/\.\[\]]+)\_/,
+  regex: /\_(.?+)\_/g,
   component: "span",
   props: {
     style: { fontStyle: "italic" }
@@ -64,7 +64,7 @@ const italicConverter = {
 
 ```js
 const linkConverter = {
-  regex: /(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?(?:\[(.+)\])?/,
+  regex: /((?:https?:\/\/)?(?:[\da-z\.-]+)\.(?:[a-z\.]{2,6})(?:[-a-zA-Z0-9@:%_\+.~#?&//=]*)*\/?)(?:\[(.+?)\])?/g,
   component: "a",
   props: ([_, url]) => {
     return { href: url, targer: "_blank" };
@@ -116,7 +116,7 @@ ComponentifyProps = {
 - Style parts of text in bold
 
 ```js
-import Componentify, { boldConverter } from "componentify-react";
+import Componentify, { boldConverter } from "react-componentify";
 
 <Componentify
   text={"Тhis is bold *text* and *more* text"}
@@ -127,7 +127,7 @@ import Componentify, { boldConverter } from "componentify-react";
 - Style parts of text in italic
 
 ```js
-import Componentify, { italicConverter } from "componentify-react";
+import Componentify, { italicConverter } from "react-componentify";
 
 <Componentify text={"Тhis is italic _text_"} converters={[italicConverter]} />;
 ```
@@ -135,7 +135,7 @@ import Componentify, { italicConverter } from "componentify-react";
 - Have clickable links
 
 ```js
-import Componentify, { linkConverter } from "componentify-react";
+import Componentify, { linkConverter } from "react-componentify";
 
 <Componentify
   text={"Тhis is https://google.com link"}
@@ -146,7 +146,7 @@ import Componentify, { linkConverter } from "componentify-react";
 - Have clickable links with custom inner text
 
 ```js
-import Componentify, { linkConverter } from "componentify-react";
+import Componentify, { linkConverter } from "react-componentify";
 
 <Componentify
   text={"Тhis is https://google.com[Google] link"}
@@ -157,7 +157,7 @@ import Componentify, { linkConverter } from "componentify-react";
 - Replace \n with <br/>
 
 ```js
-import Componentify, { brTagConverter } from "componentify-react";
+import Componentify, { brTagConverter } from "react-componentify";
 
 <Componentify
   text={"Тhis is line one<br/>This is line two"}
@@ -168,7 +168,7 @@ import Componentify, { brTagConverter } from "componentify-react";
 - Replace words
 
 ```js
-import Componentify from "componentify-react";
+import Componentify from "react-componentify";
 
 <Componentify
   text="Hi, my name is John"
@@ -190,7 +190,7 @@ import Componentify from "componentify-react";
 import Componentify, {
   boldConverter,
   italicConverter
-} from "componentify-react";
+} from "react-componentify";
 
 <Componentify
   text="Тhis is my *bold and _italic_* text"
@@ -201,7 +201,7 @@ import Componentify, {
 - Style liks in bold
 
 ```js
-import Componentify, { boldConverter, linkConverter } from "componentify-react";
+import Componentify, { boldConverter, linkConverter } from "react-componentify";
 
 <Componentify
   text="Тhis is my bold *https://google.com* link"
