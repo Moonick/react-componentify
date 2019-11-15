@@ -38,7 +38,7 @@ First, let's look at the built-in `Converter`s:
 
 ```js
 const boldConverter = {
-  regex: /\*(.+?)\*/,
+  regex: /\\*([\\w\\d\\s\\:\\/\\.\\[\\]]+)\\*/g,
   component: "span",
   props: {
     style: { fontWeight: "900" }
@@ -51,7 +51,7 @@ const boldConverter = {
 
 ```js
 const italicConverter = {
-  regex: /\_(.?+)\_/g,
+  regex: /\\_([\\w\\d\\s\\:\\/\\.\\[\\]]+)\\_/g,
   component: "span",
   props: {
     style: { fontStyle: "italic" }

@@ -5,8 +5,8 @@ export const LINK_REGEX = new RegExp(
   "((?:https?:\/\/)?(?:[\da-z\.-]+)\.(?:[a-z\.]{2,6})(?:[-a-zA-Z0-9@:%_\+.~#?&//=]*)*\/?)(?:\[(.+?)\])?/",
   "g"
 );
-export const BOLD_REGEX = new RegExp("\*(.+?)\*", "g");
-export const ITALIC_REGEX = new RegExp("\\_(.+?)\\_", "g");
+export const BOLD_REGEX = new RegExp("\\*([\\w\\d\\s\\:\\/\\.\\[\\]]+)\\*", "g");
+export const ITALIC_REGEX = new RegExp("\\_([\\w\\d\\s\\:\\/\\.\\[\\]]+)\\_", "g");
 export const BR_REGEX = new RegExp("<br\\/>", "g");
 
 export const boldConverter = {
